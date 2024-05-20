@@ -22,7 +22,7 @@ function submit() {
     PLAYER_NAMES = []
     for (let k = ta; k > 0; k--) {
 
-        PLAYER_NAMES.push(document.getElementById(k).value)
+        PLAYER_NAMES.push(k)
     }
 
     console.log(randomOrder(getPairings(ta)))
@@ -32,6 +32,7 @@ let PLAYER_NAMES = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", 
 function gameName(x, y) {
     return PLAYER_NAMES[x] + "-" + PLAYER_NAMES[y]
 }
+let oPairings = []
 function getPairings(ta) {
 
     const pairings = [];
@@ -41,6 +42,7 @@ function getPairings(ta) {
             pairings.push(gameName(x, y))
         }
     }
+    oPairings = pairings
     return pairings
 }
 
@@ -68,6 +70,54 @@ function randomOrder(array) {
         }
         throw new Error("Unreachable")
     }
+    console.log(randomArray)
+    checkGames(randomArray)
     return randomArray
+
 }
-console.log(randomOrder(getPairings(6)))
+//console.log(randomOrder(getPairings(6)))
+
+randomOrder(getPairings(6))
+
+function checkGames(array2) {
+    let times = 0
+    let check = false;
+    let arrayInBetween = []
+
+    for (i = 0; i < array2.length / (6 / 2); i++) {
+        arrayInBetween = array2.slice(0 + i * 6 / 2, 0 + (i + 1) * 6 / 2)
+        times = 0
+
+        for (j = 0; j < 6; j++) {
+            times = 0
+            for (k = 0; k < arrayInBetween.length; k++) {
+                if (arrayInBetween[k].includes(PLAYER_NAMES[j])) {
+                    times++
+                    console.log(k)
+                    console.log(arrayInBetween[k])
+                    console.log(PLAYER_NAMES[j])
+                    console.log(times)
+                    if (times > 1) {
+                        check = true
+                        console.log("to many")
+                        randomOrder(oPairings)
+                        break
+                    }
+                }
+            }
+            if (check == true) {
+                break
+            }
+        }
+        if (check == true) {
+            break
+        }
+        console.log(arrayInBetween)
+        if (i == array2.length - 1 && check == false) {
+            console.log(randomArray)
+            break
+        }
+    }
+
+    return check
+}
