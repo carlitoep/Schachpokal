@@ -77,7 +77,9 @@ function randomOrder(array) {
 }
 //console.log(randomOrder(getPairings(6)))
 
-randomOrder(getPairings(6))
+//randomOrder(getPairings(6))
+let perfect = ['a-e', 'd-f', 'b-c', 'd-a', 'c-e', 'f-b', 'a-c', 'b-d', 'e-f', 'a-b', 'f-c', 'd-e', 'f-a', 'e-b', 'c-d']
+console.log(checkGames(randomOrder(getPairings(6))))
 
 function checkGames(array2) {
     let times = 0
@@ -89,6 +91,7 @@ function checkGames(array2) {
         times = 0
 
         for (j = 0; j < 6; j++) {
+
             times = 0
             for (k = 0; k < arrayInBetween.length; k++) {
                 if (arrayInBetween[k].includes(PLAYER_NAMES[j])) {
@@ -100,8 +103,12 @@ function checkGames(array2) {
                     if (times > 1) {
                         check = true
                         console.log("to many")
+                        console.log(arrayInBetween)
+                        console.log("OPairins" + oPairings)
                         randomOrder(oPairings)
+
                         break
+
                     }
                 }
             }
@@ -113,11 +120,12 @@ function checkGames(array2) {
             break
         }
         console.log(arrayInBetween)
-        if (i == array2.length - 1 && check == false) {
-            console.log(randomArray)
-            break
-        }
-    }
 
-    return check
+    }
+    if (check == false) {
+        //console.log(randomArray)
+        whjfofia();
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        return array2
+    }
 }
