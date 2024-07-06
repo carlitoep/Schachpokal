@@ -1,3 +1,4 @@
+
 function teilnehmer() {
     let ta = document.getElementById("10").value
     console.log(ta)
@@ -46,8 +47,67 @@ function getPairings(ta) {
     return pairings
 }
 
+console.log(rounds2(randomOrder(PLAYER_NAMES), 4))
+
+function rounds2(players, number) {
+    let rounds = []
+    let players0 = []
+    let players1 = []
+    let players2 = []
+
+
+    for (i = 0; i < number; i++) {
+        players0.push(players[i])
+    }
+    console.log(players0)
+
+    for (i = 0; i < players0.length / 2; i++) {
+        players1[i] = players0[i]
+    }
+    for (i = 0; i < players0.length / 2; i++) {
+        players2[i] = players0[(players0.length - 1) - i]
+    }
+
+
+    for (i = 0; i < number - 1; i++) {
+        let round = []
+        for (j = 0; j < players1.length; j++) {
+            round.push(players1[j] + "-" + players2[j])
+        }
+        //console.log(round)
+        rounds.push(round)
+        players1.splice(1, 0, players2.shift())
+        players2.push(players1.pop())
+    }
+    return rounds
+}
+
+//for (i = 0; i < 10; i++) console.log(rounds(randomOrder(getPairings(10)), 5))
+
+function rounds(pairings, maxRoundSize) {
+
+    let rounds = []
+    const remainingPairings = new Set(pairings)
+    while (remainingPairings.size != 0) {
+        let round = []
+        const asignedPlayers = new Set()
+        for (let pairing of remainingPairings) {
+            let players = pairing.split("-")
+            if (!players.some(player => asignedPlayers.has(player))) {
+                remainingPairings.delete(pairing)
+                players.forEach(player => asignedPlayers.add(player))
+                round.push(pairing)
+                if (round.length >= maxRoundSize) break
+            }
+        }
+        rounds.push(round)
+    }
+    return rounds
+}
+
 function randomOrder(array) {
     let randomArray = []
+
     insertItems: for (let item of array) {
         const i = Math.floor(Math.random() * array.length)
         if (randomArray[i] == null) {
@@ -71,7 +131,7 @@ function randomOrder(array) {
         throw new Error("Unreachable")
     }
     console.log(randomArray)
-    checkGames(randomArray)
+    //checkGames(randomArray)
     return randomArray
 
 }
@@ -79,7 +139,7 @@ function randomOrder(array) {
 
 //randomOrder(getPairings(6))
 let perfect = ['a-e', 'd-f', 'b-c', 'd-a', 'c-e', 'f-b', 'a-c', 'b-d', 'e-f', 'a-b', 'f-c', 'd-e', 'f-a', 'e-b', 'c-d']
-console.log(checkGames(randomOrder(getPairings(6))))
+//console.log(checkGames(randomOrder(getPairings(6))))
 
 function checkGames(array2) {
     let times = 0
