@@ -2,7 +2,7 @@
 function teilnehmer() {
     let ta = document.getElementById("10").value
     console.log(ta)
-    for (let i = ta; i > 0; i--) {
+    for (let i = 0; i < ta; i++) {
         const input = document.createElement("div");
         input.innerHTML = /*` <input id="` + i + `" type="text" />`*/ `<input id="` + i + `" type="text" >`
         console.log(i)
@@ -16,17 +16,19 @@ function teilnehmer() {
     document.body.append(button);
 
 
+
 }
 function submit() {
     let ta = document.getElementById("10").value
     console.log("dddddd")
     PLAYER_NAMES = []
-    for (let k = ta; k > 0; k--) {
+    for (let k = 0; k < ta; k++) {
 
-        PLAYER_NAMES.push(k)
+        PLAYER_NAMES.push(document.getElementById(k).value)
     }
 
     console.log(randomOrder(getPairings(ta)))
+    console.log(rounds2(randomOrder(PLAYER_NAMES), ta))
 
 }
 let PLAYER_NAMES = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
@@ -47,7 +49,7 @@ function getPairings(ta) {
     return pairings
 }
 
-console.log(rounds2(randomOrder(PLAYER_NAMES), 4))
+//document.addEventListener('DOMContentLoaded', (console.log(rounds2(randomOrder(PLAYER_NAMES), 4))))
 
 function rounds2(players, number) {
     let rounds = []
@@ -71,13 +73,23 @@ function rounds2(players, number) {
 
     for (i = 0; i < number - 1; i++) {
         let round = []
+        const h2 = document.createElement("div");
+        h2.id = 'div' + i;
+        h2.innerHTML = ' <h2> Spieltag ' + (i + 1) + '</h2>';
+        document.body.append(h2);
         for (j = 0; j < players1.length; j++) {
             round.push(players1[j] + "-" + players2[j])
+            const p = document.createElement("p")
+            p.innerHTML = players1[j] + "-" + players2[j]
+            document.getElementById('div' + i).append(p)
+
         }
         //console.log(round)
         rounds.push(round)
         players1.splice(1, 0, players2.shift())
         players2.push(players1.pop())
+
+
     }
     return rounds
 }
