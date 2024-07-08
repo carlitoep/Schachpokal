@@ -9,3 +9,7 @@
 div{
    text-align: center;
 }
+input{
+   width: 100px;
+   height: 20px;
+}

@@ -1,34 +1,64 @@
 
 function teilnehmer() {
-    let ta = document.getElementById("10").value
+    let ta = document.getElementById("ta").value
     console.log(ta)
-    for (let i = 0; i < ta; i++) {
-        const input = document.createElement("div");
-        input.innerHTML = /*` <input id="` + i + `" type="text" />`*/ `<input id="` + i + `" type="text" >`
-        console.log(i)
-        document.body.append(input);
-        const br = document.createElement("br");
-        br.innerHTML = " <br  />";
-        document.body.append(br);
+
+    //window.location.href = "blitz2.html"
+    let newPage = window.open("blitz2.html", '_blank')
+    //if (page === "blitz2") {
+
+    //} else {
+    //    teilnehmer()
+    // }
+
+    newPage.onload = function teilnehmer2() {
+
+        for (let i = 0; i < ta; i++) {
+            const input = document.createElement("div");
+            input.innerHTML = ' <input id="' + i + '" type="text" />'
+            console.log(i)
+            newPage.document.body.append(input);
+            const br = document.createElement("br");
+            br.innerHTML = " <br  />";
+            newPage.document.body.append(br);
+        }
+
+        const buttonDiv = document.createElement("div");
+        buttonDiv.id = "buttonDiv"
+        newPage.document.body.append(buttonDiv);
+        let div = newPage.document.getElementById("buttonDiv")
+        const button = document.createElement("button");
+
+        button.textContent = "Enter"
+        button.id = "EnterButton"
+        div.append(button);
+        button.setAttribute("onclick", "submit(" + ta + ")")
+
+
     }
-    const button = document.createElement("div");
-    button.innerHTML = ` <button onclick="submit()">Enter`;
-    document.body.append(button);
 
 
 
 }
-function submit() {
-    let ta = document.getElementById("10").value
-    console.log("dddddd")
-    PLAYER_NAMES = []
-    for (let k = 0; k < ta; k++) {
 
-        PLAYER_NAMES.push(document.getElementById(k).value)
+
+
+function submit(ta) {
+    let newPage2 = window.open("blitz3.html", '_blank')
+
+    newPage2.onload = function submit2() {
+        console.log("dddddd:" + document.getElementById(0).value)
+        PLAYER_NAMES = []
+        console.log("fdafdafaf" + ta)
+        for (let k = 0; k < ta; k++) {
+            console.log("d" + k)
+            PLAYER_NAMES.push(document.getElementById(k).value)
+            console.log(PLAYER_NAMES)
+        }
+        console.log("qdadad")
+        //console.log(randomOrder(getPairings(ta)))
+        console.log(rounds2(randomOrder(PLAYER_NAMES), ta, newPage2))
     }
-
-    console.log(randomOrder(getPairings(ta)))
-    console.log(rounds2(randomOrder(PLAYER_NAMES), ta))
 
 }
 let PLAYER_NAMES = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
@@ -51,7 +81,7 @@ function getPairings(ta) {
 
 //document.addEventListener('DOMContentLoaded', (console.log(rounds2(randomOrder(PLAYER_NAMES), 4))))
 
-function rounds2(players, number) {
+function rounds2(players, number, page) {
     let rounds = []
     let players0 = []
     let players1 = []
@@ -76,12 +106,12 @@ function rounds2(players, number) {
         const h2 = document.createElement("div");
         h2.id = 'div' + i;
         h2.innerHTML = ' <h2> Spieltag ' + (i + 1) + '</h2>';
-        document.body.append(h2);
+        page.document.body.append(h2);
         for (j = 0; j < players1.length; j++) {
             round.push(players1[j] + "-" + players2[j])
             const p = document.createElement("p")
             p.innerHTML = players1[j] + "-" + players2[j]
-            document.getElementById('div' + i).append(p)
+            page.document.getElementById('div' + i).append(p)
 
         }
         //console.log(round)
