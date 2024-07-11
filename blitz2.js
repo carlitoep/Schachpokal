@@ -90,6 +90,7 @@ function rounds2(players, number, page) {
 
     for (i = 0; i < number; i++) {
         players0.push(players[i])
+
     }
     console.log(players0)
 
@@ -108,19 +109,102 @@ function rounds2(players, number, page) {
         h2.innerHTML = ' <h2> Spieltag ' + (i + 1) + '</h2>';
         page.document.body.append(h2);
         for (j = 0; j < players1.length; j++) {
-            round.push(players1[j] + "-" + players2[j])
-            const p = document.createElement("p")
-            p.innerHTML = players1[j] + "-" + players2[j]
-            page.document.getElementById('div' + i).append(p)
+            let counter = 0;
+            let counter2 = 0
+            console.log("roundslength", rounds.length)
+            for (k = 0; k < rounds.length; k++) {
 
+                for (l = 0; l < rounds[0].length; l++) {
+                    console.log("kl1", k, l)
+                    console.log(rounds)
+                    console.log(rounds[k][l].split("-")[0], players1[j])
+                    if (rounds[k][l].split("-")[0] == players1[j]) {
+
+                        counter++
+                        console.log("counter1:" + counter)
+                    }
+                }
+            }
+            for (k = 0; k < rounds.length; k++) {
+
+                for (l = 0; l < rounds[0].length; l++) {
+                    console.log("kl2", k, l)
+                    console.log(rounds)
+                    console.log(rounds[k][l].split("-")[0], players2[j])
+                    if (rounds[k][l].split("-")[0] == players2[j]) {
+
+                        counter2++
+                        console.log("counter2:" + counter2)
+                    }
+                }
+            }
+
+            console.log("beide conter", counter, counter2)
+            if (counter <= counter2) {
+                console.log("Teil1")
+                round.push(players1[j] + "-" + players2[j])
+
+                const p = document.createElement("p")
+                p.innerHTML = players1[j] + "-" + players2[j]
+                page.document.getElementById('div' + i).append(p)
+
+                const button = document.createElement("button");
+                button.textContent = "Gewonnen"
+                page.document.getElementById('div' + i).append(button);
+                button.setAttribute("onclick", 'addPoints("' + players1[j] + '","lose",' + number + ')')
+
+                const draw = document.createElement("button");
+                draw.textContent = "Draw"
+                page.document.getElementById('div' + i).append(draw);
+                draw.setAttribute("onclick", 'addPoints("' + players1[j] + '","' + players2[j] + '",' + number + ')')
+
+                const button2 = document.createElement("button");
+                button2.textContent = "Gewonnen"
+                page.document.getElementById('div' + i).append(button2);
+                button2.setAttribute("onclick", 'addPoints("' + players2[j] + '","lose",' + number + ')')
+
+            } else {
+                console.log("Teil2")
+                round.push(players2[j] + "-" + players1[j])
+
+                const p = document.createElement("p")
+                p.innerHTML = players2[j] + "-" + players1[j]
+                page.document.getElementById('div' + i).append(p)
+
+                const button = document.createElement("button");
+                button.textContent = "Gewonnen"
+                page.document.getElementById('div' + i).append(button);
+                button.setAttribute("onclick", 'addPoints("' + players2[j] + '","lose",' + number + ')')
+
+                const draw = document.createElement("button");
+                draw.textContent = "Draw"
+                page.document.getElementById('div' + i).append(draw);
+                draw.setAttribute("onclick", 'addPoints("' + players2[j] + '","' + players1[j] + '",' + number + ')')
+
+                const button2 = document.createElement("button");
+                button2.textContent = "Gewonnen"
+                page.document.getElementById('div' + i).append(button2);
+                button2.setAttribute("onclick", 'addPoints("' + players1[j] + '","lose",' + number + ')')
+            }
         }
         //console.log(round)
         rounds.push(round)
         players1.splice(1, 0, players2.shift())
         players2.push(players1.pop())
-
-
     }
+
+
+    const leaderbord = document.createElement("div")
+    leaderbord.id = "leaderbord"
+    page.document.body.append(leaderbord)
+
+    for (i = 0; i < players0.length; i++) {
+        const l = document.createElement("p")
+        l.innerHTML = players[i] + "  " + 0
+        l.id = "p" + i
+        page.document.getElementById("leaderbord").append(l)
+    }
+
     return rounds
 }
 
@@ -230,3 +314,141 @@ function checkGames(array2) {
         return array2
     }
 }
+
+function adjustWidth(el) {
+    el.style.width = 'auto';
+    el.style.width = (el.scrollWidth + 10) + 'px';
+}
+
+function addPoints(player, player2, number) {
+    console.log(player, player2, number)
+    let newPlayersScores = [[], []]
+    for (i = 0; i < number; i++) {
+        let p = document.getElementById("p" + i).innerHTML
+        console.log(p)
+        let split = p.split("  ");
+        newPlayersScores[0].push(split[0])
+        newPlayersScores[1].push(split[1])
+    }
+    console.log(newPlayersScores)
+
+    if (player2 == "lose") {
+        newPlayersScores[1][newPlayersScores[0].indexOf(player)] = Number(newPlayersScores[1][newPlayersScores[0].indexOf(player)]) + 1
+    } else {
+        newPlayersScores[1][newPlayersScores[0].indexOf(player)] = Number(newPlayersScores[1][newPlayersScores[0].indexOf(player)]) + 0.5
+        newPlayersScores[1][newPlayersScores[0].indexOf(player2)] = Number(newPlayersScores[1][newPlayersScores[0].indexOf(player2)]) + 0.5
+    }
+    for (i = 0; i < number; i++) {
+        document.getElementById("p" + i).innerHTML = newPlayersScores[0][i] + "  " + newPlayersScores[1][i]
+    }
+    console.log("newPlayersScores")
+    console.log(newPlayersScores)
+    rankPlayers(newPlayersScores)
+    return newPlayersScores
+}
+
+let test1 = ["a", "b", "c", "d"]
+let test2 = [1, 2, 3, 4]
+
+//console.log(rankPlayers(test1, test2))
+
+
+
+function rankPlayers(playersScores) {
+    console.log(playersScores)
+
+    let players = playersScores[0]
+    let scores = playersScores[1]
+    let finalScore = [[], []]
+    /*const score = []
+    for (let j = 0; j < scores.length; j++) {
+        score[j] = scores[j]
+    }
+    console.log(score)*/
+    //const playersScores = [players, score]
+    /*let players = playersScores[0]
+    console.log(players)
+    let scores = []
+    for (i = 0; i < players.length; i++) {
+        scores.push(Number(playersScores[1][i]))
+    }
+    console.log(scores)
+
+    let scores1 = scores.sort(function (a, b) {
+        return b - a
+    })
+
+    console.log(scores1)
+
+    let finalScore = [[], []]
+    for (let i = 0; i < players.length; i++) {
+        finalScore[1].push(scores1[i])
+
+        console.log(playersScores[1].indexOf(scores1[i]))
+        if (playersScores[1].indexOf(scores1[i]) != -1) {
+            finalScore[0].push(playersScores[0][playersScores[1].indexOf(scores1[i])])
+        } else {
+            for (j = 0; j < playersScores[0].length; j++) {
+                let check = true
+                for (k = 0; k < finalScore[0].length; k++) {
+                    if (playersScores[0][j] == finalScore[0][k]) {
+                        console.log("j", j)
+                        console.log("playersScores" + playersScores[0])
+                        console.log(playersScores[0][j])
+                        console.log("k", k)
+                        console.log("finalScore" + finalScore)
+                        console.log("finalscoreK:" + finalScore[0][k])
+
+                        check = false
+                        break
+                    } else {
+                        console.log("continue")
+                        console.log("kj", k, j)
+                        continue
+                    }
+                }
+                if (check == true) {
+                    console.log("finalscore", playersScores[0][j])
+                    finalScore[0].push(playersScores[0][j])
+                    break;
+
+                } else {
+                    console.log("continue2")
+                    console.log("kj", k, j)
+                    continue
+                }
+
+            }
+        }
+    }
+    for (i = 0; i < players.length; i++) {
+        document.getElementById("p" + i).innerHTML = finalScore[0][i] + "  " + finalScore[1][i]
+    }
+    console.log("return")
+    console.log(finalScore)*/
+
+    let combined = players.map((player, index) => ({ player, score: scores[index] }));
+    console.log(combined)
+
+
+    combined.sort((a, b) => b.score - a.score);
+
+
+    let sortedPlayers = combined.map(item => item.player);
+    let sortedScores = combined.map(item => item.score);
+    console.log("sortedPlayers");
+    console.log(sortedPlayers);
+    console.log("sortedScores");
+    console.log(sortedScores);
+
+    finalScore[0] = sortedPlayers
+    finalScore[1] = sortedScores
+
+    for (i = 0; i < players.length; i++) {
+        document.getElementById("p" + i).innerHTML = finalScore[0][i] + "  " + finalScore[1][i]
+    }
+
+    return finalScore
+}
+
+
