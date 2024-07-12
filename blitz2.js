@@ -151,17 +151,20 @@ function rounds2(players, number, page) {
                 const button = document.createElement("button");
                 button.textContent = "Gewonnen"
                 page.document.getElementById('div' + i).append(button);
-                button.setAttribute("onclick", 'addPoints("' + players1[j] + '","lose",' + number + ')')
+                button.setAttribute("onclick", 'addPoints("' + players1[j] + '","lose",' + number + ',event' + ')')
+                button.id = "b1-" + i
 
                 const draw = document.createElement("button");
-                draw.textContent = "Draw"
+                draw.textContent = "Remis"
                 page.document.getElementById('div' + i).append(draw);
-                draw.setAttribute("onclick", 'addPoints("' + players1[j] + '","' + players2[j] + '",' + number + ')')
+                draw.setAttribute("onclick", 'addPoints("' + players1[j] + '","' + players2[j] + '",' + number + ',event' + ')')
+                draw.id = "b2-" + i
 
                 const button2 = document.createElement("button");
                 button2.textContent = "Gewonnen"
                 page.document.getElementById('div' + i).append(button2);
-                button2.setAttribute("onclick", 'addPoints("' + players2[j] + '","lose",' + number + ')')
+                button2.setAttribute("onclick", 'addPoints("' + players2[j] + '","lose",' + number + ',event' + ')')
+                button2.id = "b3-" + i
 
             } else {
                 console.log("Teil2")
@@ -174,17 +177,20 @@ function rounds2(players, number, page) {
                 const button = document.createElement("button");
                 button.textContent = "Gewonnen"
                 page.document.getElementById('div' + i).append(button);
-                button.setAttribute("onclick", 'addPoints("' + players2[j] + '","lose",' + number + ')')
+                button.setAttribute("onclick", 'addPoints("' + players2[j] + '","lose",' + number + ',event' + ')')
+                button.id = "b1-" + i
 
                 const draw = document.createElement("button");
-                draw.textContent = "Draw"
+                draw.textContent = "Remis"
                 page.document.getElementById('div' + i).append(draw);
-                draw.setAttribute("onclick", 'addPoints("' + players2[j] + '","' + players1[j] + '",' + number + ')')
+                draw.setAttribute("onclick", 'addPoints("' + players2[j] + '","' + players1[j] + '",' + number + ',event' + ')')
+                draw.id = "b2-" + i
 
                 const button2 = document.createElement("button");
                 button2.textContent = "Gewonnen"
                 page.document.getElementById('div' + i).append(button2);
-                button2.setAttribute("onclick", 'addPoints("' + players1[j] + '","lose",' + number + ')')
+                button2.setAttribute("onclick", 'addPoints("' + players1[j] + '","lose",' + number + ',event' + ')')
+                button2.id = "b3-" + i
             }
         }
         //console.log(round)
@@ -320,7 +326,17 @@ function adjustWidth(el) {
     el.style.width = (el.scrollWidth + 10) + 'px';
 }
 
-function addPoints(player, player2, number) {
+function addPoints(player, player2, number, event) {
+    console.log(event)
+
+    const buttonPressed = event.target
+    console.log(`Button ID: ${buttonPressed.id}`)
+    let buttonI = (buttonPressed.id).split("-")[1]
+    document.getElementById("b1-" + buttonI).remove();
+    document.getElementById("b2-" + buttonI).remove();
+    document.getElementById("b3-" + buttonI).remove();
+
+
     console.log(player, player2, number)
     let newPlayersScores = [[], []]
     for (i = 0; i < number; i++) {
