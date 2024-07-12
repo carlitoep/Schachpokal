@@ -1,4 +1,6 @@
 
+let wins = [[], []]
+
 function teilnehmer() {
     let ta = document.getElementById("ta").value
     console.log(ta)
@@ -90,8 +92,13 @@ function rounds2(players, number, page) {
 
     for (i = 0; i < number; i++) {
         players0.push(players[i])
+        wins[0].push(players[i])
+        wins[1].push("")
+
 
     }
+    console.log("wins")
+    console.log(wins)
     console.log(players0)
 
     for (i = 0; i < players0.length / 2; i++) {
@@ -151,19 +158,37 @@ function rounds2(players, number, page) {
                 const button = document.createElement("button");
                 button.textContent = "Gewonnen"
                 page.document.getElementById('div' + i).append(button);
-                button.setAttribute("onclick", 'addPoints("' + players1[j] + '","lose",' + number + ',event' + ')')
+                // button.setAttribute("onclick", 'addPoints("' + players1[j] + '","' + players2[j] + '","lose",' + number + ',event,' + '"' + JSON.stringify(wins) + '"' + ')')
+                (function (players1J, players2J) {
+                    button.addEventListener('click', function (event) {
+                        console.log("Button clicked:", players1J, players2J);
+                        addPoints(players1J, players2J, 'lose', number, event, wins, page);
+                    })
+                })(players1[j], players2[j]);
                 button.id = "b1-" + i
 
                 const draw = document.createElement("button");
                 draw.textContent = "Remis"
                 page.document.getElementById('div' + i).append(draw);
-                draw.setAttribute("onclick", 'addPoints("' + players1[j] + '","' + players2[j] + '",' + number + ',event' + ')')
+                //draw.setAttribute("onclick", 'addPoints("' + players1[j] + '","' + players2[j] + '","draw",' + number + ',event,' + '"' + JSON.stringify(wins) + '"' + ')')
+                (function (players1J, players2J) {
+                    draw.addEventListener('click', function (event) {
+                        console.log("Button clicked:", players1J, players2J);
+                        addPoints(players1J, players2J, 'draw', number, event, wins, page);
+                    });
+                })(players1[j], players2[j]);
                 draw.id = "b2-" + i
 
                 const button2 = document.createElement("button");
                 button2.textContent = "Gewonnen"
                 page.document.getElementById('div' + i).append(button2);
-                button2.setAttribute("onclick", 'addPoints("' + players2[j] + '","lose",' + number + ',event' + ')')
+                // button2.setAttribute("onclick", 'addPoints("' + players2[j] + '","' + players1[j] + '","lose",' + number + ',event,' + '"' + JSON.stringify(wins) + '"' + ')')
+                (function (players2J, players1J) {
+                    button2.addEventListener('click', function (event) {
+                        console.log("Button clicked:", players1J, players2J);
+                        addPoints(players2J, players1J, 'lose', number, event, wins, page);
+                    });
+                })(players2[j], players1[j]);
                 button2.id = "b3-" + i
 
             } else {
@@ -177,20 +202,37 @@ function rounds2(players, number, page) {
                 const button = document.createElement("button");
                 button.textContent = "Gewonnen"
                 page.document.getElementById('div' + i).append(button);
-                button.setAttribute("onclick", 'addPoints("' + players2[j] + '","lose",' + number + ',event' + ')')
+                // button.setAttribute("onclick", 'addPoints("' + players2[j] + '","' + players1[j] + '","lose",' + number + ',event,' + '"' + JSON.stringify(wins) + '"' + ')')
+                (function (players2J, players1J) {
+                    button.addEventListener('click', function (event) {
+                        console.log("Button clicked:", players1J, players2J);
+                        addPoints(players2J, players1J, 'lose', number, event, wins, page);
+                    });
+                })(players2[j], players1[j]);
                 button.id = "b1-" + i
 
                 const draw = document.createElement("button");
                 draw.textContent = "Remis"
                 page.document.getElementById('div' + i).append(draw);
-                draw.setAttribute("onclick", 'addPoints("' + players2[j] + '","' + players1[j] + '",' + number + ',event' + ')')
+                // draw.setAttribute("onclick", 'addPoints("' + players2[j] + '","' + players1[j] + '","draw",' + number + ',event,' + '"' + JSON.stringify(wins) + '"' + ')')
+                (function (players2J, players1J) {
+                    draw.addEventListener('click', function (event) {
+                        addPoints(players2J, players1J, 'draw', number, event, wins, page);
+                    });
+                })(players2[j], players1[j]);
                 draw.id = "b2-" + i
 
                 const button2 = document.createElement("button");
                 button2.textContent = "Gewonnen"
                 page.document.getElementById('div' + i).append(button2);
-                button2.setAttribute("onclick", 'addPoints("' + players1[j] + '","lose",' + number + ',event' + ')')
+                //button2.setAttribute("onclick", 'addPoints("' + players1[j] + '","' + players2[j] + '","lose",' + number + ',event,' + '"' + JSON.stringify(wins) + '"' + ')')
+                (function (players1J, players2J) {
+                    button2.addEventListener('click', function (event) {
+                        addPoints(players1J, players2J, 'lose', number, event, wins, page);
+                    });
+                })(players1[j], players2[j]);
                 button2.id = "b3-" + i
+
             }
         }
         //console.log(round)
@@ -326,21 +368,24 @@ function adjustWidth(el) {
     el.style.width = (el.scrollWidth + 10) + 'px';
 }
 
-function addPoints(player, player2, number, event) {
+function addPoints(player, player2, type, number, event, wins, page) {
     console.log(event)
 
+    console.log(wins)
     const buttonPressed = event.target
     console.log(`Button ID: ${buttonPressed.id}`)
     let buttonI = (buttonPressed.id).split("-")[1]
-    document.getElementById("b1-" + buttonI).remove();
-    document.getElementById("b2-" + buttonI).remove();
-    document.getElementById("b3-" + buttonI).remove();
+    page.document.getElementById("b1-" + buttonI).remove();
+    page.document.getElementById("b2-" + buttonI).remove();
+    page.document.getElementById("b3-" + buttonI).remove();
 
 
-    console.log(player, player2, number)
+
+
+    console.log(player, player2, type, number)
     let newPlayersScores = [[], []]
     for (i = 0; i < number; i++) {
-        let p = document.getElementById("p" + i).innerHTML
+        let p = page.document.getElementById("p" + i).innerHTML
         console.log(p)
         let split = p.split("  ");
         newPlayersScores[0].push(split[0])
@@ -348,18 +393,28 @@ function addPoints(player, player2, number, event) {
     }
     console.log(newPlayersScores)
 
-    if (player2 == "lose") {
+    if (type == "lose") {
         newPlayersScores[1][newPlayersScores[0].indexOf(player)] = Number(newPlayersScores[1][newPlayersScores[0].indexOf(player)]) + 1
+        const pWinner = page.document.createElement("p")
+        pWinner.innerHTML = player + " hat gewonnen"
+        page.document.getElementById('div' + buttonI).append(pWinner);
+        wins[1][wins[0].indexOf(player)] = wins[1][wins[0].indexOf(player)] + ",1," + player2
     } else {
         newPlayersScores[1][newPlayersScores[0].indexOf(player)] = Number(newPlayersScores[1][newPlayersScores[0].indexOf(player)]) + 0.5
         newPlayersScores[1][newPlayersScores[0].indexOf(player2)] = Number(newPlayersScores[1][newPlayersScores[0].indexOf(player2)]) + 0.5
+        console.log("aa" + newPlayersScores[1][newPlayersScores[0].indexOf(player2)])
+        const pWinner = document.createElement("p")
+        pWinner.innerHTML = "Remis"
+        page.document.getElementById('div' + buttonI).append(pWinner);
+        wins[1][wins[0].indexOf(player)] = wins[1][wins[0].indexOf(player)] + ",0.5," + player2
+        wins[1][wins[0].indexOf(player2)] = wins[1][wins[0].indexOf(player2)] + ",0.5," + player
     }
     for (i = 0; i < number; i++) {
-        document.getElementById("p" + i).innerHTML = newPlayersScores[0][i] + "  " + newPlayersScores[1][i]
+        page.document.getElementById("p" + i).innerHTML = newPlayersScores[0][i] + "  " + newPlayersScores[1][i]
     }
     console.log("newPlayersScores")
     console.log(newPlayersScores)
-    rankPlayers(newPlayersScores)
+    rankPlayers(newPlayersScores, page)
     return newPlayersScores
 }
 
@@ -370,12 +425,14 @@ let test2 = [1, 2, 3, 4]
 
 
 
-function rankPlayers(playersScores) {
+function rankPlayers(playersScores, page) {
     console.log(playersScores)
 
     let players = playersScores[0]
     let scores = playersScores[1]
     let finalScore = [[], []]
+    let ArrayFeinwertung = []
+
     /*const score = []
     for (let j = 0; j < scores.length; j++) {
         score[j] = scores[j]
@@ -389,17 +446,17 @@ function rankPlayers(playersScores) {
         scores.push(Number(playersScores[1][i]))
     }
     console.log(scores)
-
+ 
     let scores1 = scores.sort(function (a, b) {
         return b - a
     })
-
+ 
     console.log(scores1)
-
+ 
     let finalScore = [[], []]
     for (let i = 0; i < players.length; i++) {
         finalScore[1].push(scores1[i])
-
+ 
         console.log(playersScores[1].indexOf(scores1[i]))
         if (playersScores[1].indexOf(scores1[i]) != -1) {
             finalScore[0].push(playersScores[0][playersScores[1].indexOf(scores1[i])])
@@ -414,7 +471,7 @@ function rankPlayers(playersScores) {
                         console.log("k", k)
                         console.log("finalScore" + finalScore)
                         console.log("finalscoreK:" + finalScore[0][k])
-
+ 
                         check = false
                         break
                     } else {
@@ -427,13 +484,13 @@ function rankPlayers(playersScores) {
                     console.log("finalscore", playersScores[0][j])
                     finalScore[0].push(playersScores[0][j])
                     break;
-
+ 
                 } else {
                     console.log("continue2")
                     console.log("kj", k, j)
                     continue
                 }
-
+ 
             }
         }
     }
@@ -442,29 +499,52 @@ function rankPlayers(playersScores) {
     }
     console.log("return")
     console.log(finalScore)*/
+    for (j = 0; j < players.length; j++) {
+        let playerWins = wins[1][wins[0].indexOf(players[j])].split(",")
+        let feinwertung = 0
+        console.log(playerWins)
+        for (k = 1; k < playerWins.length; k = k + 2) {
+            feinwertung = feinwertung + Number(playerWins[k]) * Number(scores[players.indexOf(playerWins[k + 1])])
+            console.log(feinwertung)
+        }
 
-    let combined = players.map((player, index) => ({ player, score: scores[index] }));
+        ArrayFeinwertung.push(feinwertung)
+    }
+
+    let combined = players.map((player, index) => ({ player, score: scores[index], fein: ArrayFeinwertung[index] }));
     console.log(combined)
 
 
-    combined.sort((a, b) => b.score - a.score);
+    combined.sort((a, b) => {
+        if (b.score == a.score) {
+            return b.fein - a.fein;
+        }
+        return b.score - a.score
+    });
 
 
     let sortedPlayers = combined.map(item => item.player);
     let sortedScores = combined.map(item => item.score);
+    let sortedFein = combined.map(item => item.fein);
     console.log("sortedPlayers");
     console.log(sortedPlayers);
     console.log("sortedScores");
     console.log(sortedScores);
+    console.log("sortedFein");
+    console.log(sortedFein);
 
     finalScore[0] = sortedPlayers
     finalScore[1] = sortedScores
 
+
     for (i = 0; i < players.length; i++) {
-        document.getElementById("p" + i).innerHTML = finalScore[0][i] + "  " + finalScore[1][i]
+        page.document.getElementById("p" + i).innerHTML = finalScore[0][i] + "  " + finalScore[1][i] + "  " + sortedFein[i]
     }
+    console.log("wins")
+    console.log(wins)
 
     return finalScore
+
 }
 
 
